@@ -1,25 +1,23 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { TransactionEntity } from "../entities/transaction.entity";
 import { CoreRepositoryEnum } from "@shared/enums";
 import { Repository } from "typeorm";
-import { ProductEntity } from "../entities/product.entity";
 
 @Injectable()
-export class ProductsService {
-    constructor(@Inject(CoreRepositoryEnum.PRODUCT_REPOSITORY) private readonly repository: Repository<ProductEntity>){   
+export class TransactionsService{
+    constructor(@Inject(CoreRepositoryEnum.TRANSACTION_REPOSITORY) private readonly repository: Repository<TransactionEntity>){   
     }
 
+    
     async create(payload: any): Promise<any>{
         const newEntity = this.repository.create();
         newEntity.code=payload.code;
-        newEntity.costPrice=payload.costPrice;
         newEntity.description=payload.description;
-        newEntity.minimumAmount=payload.minimumAmount;
-        newEntity.name=payload.name;
-        newEntity.sellingPrice=payload.sellingPrice;
-        newEntity.categoryId=payload.category.id;
+        newEntity.date=payload.date;
+        newEntity.type=payload.type;
+
         
-        
-        return await this.repository.save(newEntity);
+         return await this.repository.save(newEntity);
     } 
 
     async update(id:string,payload:any): Promise<any>{
@@ -30,21 +28,11 @@ export class ProductsService {
         }
 
         entity.code=payload.code;
-        entity.costPrice=payload.costPrice;
         entity.description=payload.description;
-        entity.minimumAmount=payload.minimumAmount;
-        entity.name=payload.name;
-        entity.sellingPrice=payload.sellingPrice;
-        entity.categoryId=payload.category.id;
-        
+        entity.date=payload.date;
+        entity.type=payload.type;
+             
          return await this.repository.save(entity);
-    }
-
-    async findCatalogues(): Promise<any>{
-        const entities = await this.repository.find({where:{enabled:true}});
-
-       return entities;
-        
     }
 
     async findOne(id:string): Promise<any>{
@@ -64,7 +52,7 @@ export class ProductsService {
         
     }
 
-    async remove(id: string): Promise<ProductEntity> {
+    async remove(id: string): Promise<TransactionEntity> {
         const data = await this.repository.findOneBy({id});
 
         if (!data) {
@@ -74,5 +62,4 @@ export class ProductsService {
         return await this.repository.softRemove(data);
     }
 
-    
 }

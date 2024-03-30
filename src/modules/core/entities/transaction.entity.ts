@@ -3,14 +3,13 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    JoinColumn,
-    ManyToOne,
+
     OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
 import { ProductEntity, TransactionDetailEntity } from '@core/entities';
-import { UserEntity } from '@auth/entities';
+
 //Cambios realizados creacion de la entidad
 
 @Entity('transactions', {schema: 'core'})
