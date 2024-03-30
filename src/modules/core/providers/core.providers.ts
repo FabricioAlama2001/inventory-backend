@@ -20,26 +20,31 @@ export const coreProviders = [
     },
     {
         provide: CoreRepositoryEnum.LOCATION_REPOSITORY,
+        useFactory: (dataSource: DataSource) => dataSource.getRepository(LocationEntity),
+        inject: [ConfigEnum.PG_DATA_SOURCE],
+    },
+    {
+        provide: CoreRepositoryEnum.CATEGORY_REPOSITORY,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(CategoryEntity),
         inject: [ConfigEnum.PG_DATA_SOURCE],
     },
     {
-        provide: CoreRepositoryEnum.LOCATION_REPOSITORY,
+        provide: CoreRepositoryEnum.PRODUCT_REPOSITORY,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(ProductEntity),
         inject: [ConfigEnum.PG_DATA_SOURCE],
     },
     {
-        provide: CoreRepositoryEnum.LOCATION_REPOSITORY,
+        provide: CoreRepositoryEnum.SIGNATURE_REPOSITORY,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(SignatureEntity),
         inject: [ConfigEnum.PG_DATA_SOURCE],
     },
     {
-        provide: CoreRepositoryEnum.LOCATION_REPOSITORY,
+        provide: CoreRepositoryEnum.TRANSACTION_REPOSITORY,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(TransactionEntity),
         inject: [ConfigEnum.PG_DATA_SOURCE],
     },
     {
-        provide: CoreRepositoryEnum.LOCATION_REPOSITORY,
+        provide: CoreRepositoryEnum.TRANSACTION_DETAIL_REPOSITORY,
         useFactory: (dataSource: DataSource) => dataSource.getRepository(TransactionDetailEntity),
         inject: [ConfigEnum.PG_DATA_SOURCE],
     },
