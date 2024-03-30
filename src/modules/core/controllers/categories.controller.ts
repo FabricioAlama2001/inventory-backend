@@ -10,15 +10,11 @@ import {
     Patch,
     Post,
     Put,
-    Query
-} from '@nestjs/common';
+    } from '@nestjs/common';
 import {ApiOperation, ApiTags} from '@nestjs/swagger';
 import {ResponseHttpModel} from '@shared/models';
-import {CreateCatalogueDto, FilterCatalogueDto, UpdateCatalogueDto} from '@core/dto';
 import {CatalogueEntity} from '@core/entities';
-import {CatalogueTypeEnum} from '@shared/enums';
-import { CataloguesService } from '../services/catalogues.service';
-import { CategoriesService } from '../services/category.service';
+import { CategoriesService } from '../services/categories.service';
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -41,7 +37,7 @@ export class CategoryController {
     @ApiOperation({summary: 'List all catalogues'})
     @Get('catalogues')
     @HttpCode(HttpStatus.OK)
-    async catalogue() :Promise<ResponseHttpModel> {
+    async findCatalogues() :Promise<ResponseHttpModel> {
         const response = await this.categoriesService.findCatalogues();
         
         return {

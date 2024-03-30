@@ -11,8 +11,7 @@ import {ServiceResponseHttpModel} from '@shared/models';
 
 @Injectable()
 export class CategoriesService {
-    clientRedis: any = null;
-
+   
     constructor(@Inject(CoreRepositoryEnum.CATEGORY_REPOSITORY) private readonly repository: Repository<CategoryEntity>,) {    
     }
 
