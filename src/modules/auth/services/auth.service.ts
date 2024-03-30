@@ -23,7 +23,7 @@ import * as fs from 'fs';
 import { config } from '@config';
 import { ConfigType } from '@nestjs/config';
 import { MailDataInterface } from '../../common/interfaces/mail-data.interface';
-import { SchoolPeriodsService } from '@core/services';
+
 
 const { PDFDocument } = require('pdfkit-table-ts');
 
@@ -40,7 +40,7 @@ export class AuthService {
     private readonly userService: UsersService,
     private jwtService: JwtService,
     private readonly nodemailerService: MailService,
-    private readonly schoolPeriodsService: SchoolPeriodsService,
+    
   ) {
   }
 
@@ -75,10 +75,8 @@ export class AuthService {
       },
       relations: {
         roles: true,
-        institutions: true,
-        careers: { institution: true, curriculums: true },
-        teacher: { careers: true },
-        student: { careers: true },
+        
+       
       },
     })) as UserEntity;
 
@@ -112,8 +110,7 @@ export class AuthService {
 
     const accessToken = this.generateJwt(user);
 
-    const schoolPeriod = await this.schoolPeriodsService.findOpenSchoolPeriod();
-    return { data: { accessToken, user, schoolPeriod } };
+    return { data: { accessToken, user } };
   }
 
   async findProfile(id: string): Promise<ReadProfileDto> {

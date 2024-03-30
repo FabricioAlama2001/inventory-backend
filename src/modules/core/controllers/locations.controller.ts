@@ -1,7 +1,8 @@
 import {Controller, Get, HttpCode, HttpStatus,} from '@nestjs/common';
 import {ApiOperation, ApiTags} from '@nestjs/swagger';
 import {ResponseHttpModel} from '@shared/models';
-import {LocationsService} from '@core/services';
+import { LocationsService } from '../services/locations.service';
+
 
 @ApiTags('Locations')
 @Controller('locations')

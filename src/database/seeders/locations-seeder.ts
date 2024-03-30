@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { LocationsService } from '@core/services';
 import * as XLSX from 'xlsx';
 import { join } from 'path';
+import { LocationsService } from 'src/modules/core/services/locations.service';
 
 @Injectable()
 export class LocationsSeeder {

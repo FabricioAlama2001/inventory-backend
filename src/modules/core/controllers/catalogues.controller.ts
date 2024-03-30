@@ -14,10 +14,10 @@ import {
 } from '@nestjs/common';
 import {ApiOperation, ApiTags} from '@nestjs/swagger';
 import {ResponseHttpModel} from '@shared/models';
-import {CataloguesService} from '@core/services';
 import {CreateCatalogueDto, FilterCatalogueDto, UpdateCatalogueDto} from '@core/dto';
 import {CatalogueEntity} from '@core/entities';
 import {CatalogueTypeEnum} from '@shared/enums';
+import { CataloguesService } from '../services/catalogues.service';
 
 @ApiTags('Catalogues')
 @Controller('catalogues')

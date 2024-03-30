@@ -1,6 +1,5 @@
 import {Injectable} from '@nestjs/common';
 import {CreateCatalogueDto, SeedCatalogueDto} from '@core/dto';
-import {CataloguesService} from '@core/services';
 import {
     CatalogueStateEnum,
     CatalogueTypeEnum,
@@ -10,6 +9,7 @@ import {
 } from '@shared/enums';
 import {CatalogueEntity} from "@core/entities";
 import {SeedCatalogueParentDto} from "../../modules/core/dto/catalogues/seed-catalogue-parent.dto";
+import { CataloguesService } from 'src/modules/core/services/catalogues.service';
 
 @Injectable()
 export class CataloguesSeeder {

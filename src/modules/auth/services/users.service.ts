@@ -7,7 +7,6 @@ import {UserEntity} from '@auth/entities';
 import {PaginationDto} from '@core/dto';
 import {ServiceResponseHttpModel} from '@shared/models';
 import {AuthRepositoryEnum} from '@shared/enums';
-import {CareerEntity} from '@core/entities';
 
 @Injectable()
 export class UsersService {
@@ -186,12 +185,5 @@ export class UsersService {
         return plainToInstance(ReadUserDto, userUpdated);
     }
 
-    async findCareersByUser(id: string): Promise<CareerEntity[]> {
-        const user = await this.repository.findOne({
-            where: {id},
-            relations: {careers: true},
-        });
-
-        return user.careers;
-    }
+   
 }

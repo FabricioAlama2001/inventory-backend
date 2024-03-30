@@ -11,19 +11,16 @@ import {
     BeforeInsert,
     BeforeUpdate,
     ManyToMany,
+    Transaction,
+    OneToMany,
 } from 'typeorm';
 import * as Bcrypt from 'bcrypt';
 import {Exclude} from 'class-transformer';
 import {RoleEntity} from '@auth/entities';
 import {
-    CareerEntity,
-    CatalogueEntity,
-    InstitutionEntity,
-    OriginAddressEntity,
-    ResidenceAddressEntity,
-    StudentEntity,
-    TeacherEntity
-} from '@core/entities';
+   
+    CatalogueEntity, TransactionEntity,
+    } from '@core/entities';
 
 @Entity('users', {schema: 'auth'})
 export class UserEntity {
@@ -52,27 +49,9 @@ export class UserEntity {
     deletedAt: Date;
 
     /** Inverse Relationship **/
-    @ManyToMany(() => CareerEntity, career => career.users)
-    careers: CareerEntity[];
-
-    @ManyToMany(() => InstitutionEntity, institution => institution.users)
-    institutions: InstitutionEntity[];
-
-    @OneToOne(() => OriginAddressEntity, originAddress => originAddress.user)
-    originAddress: OriginAddressEntity;
-
-    @OneToOne(() => ResidenceAddressEntity, residenceAddress => residenceAddress.user)
-    residenceAddress: ResidenceAddressEntity;
-
     @ManyToMany(() => RoleEntity, role => role.users)
     roles: RoleEntity[];
-
-    @OneToOne(() => StudentEntity, student => student.user)
-    student: StudentEntity;
-
-    @OneToOne(() => TeacherEntity, teacher => teacher.user)
-    teacher: TeacherEntity;
-
+    
     /** Foreign Keys **/
     @ManyToOne(() => CatalogueEntity, {nullable: true})
     @JoinColumn({name: 'blood_type_id'})
