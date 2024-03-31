@@ -8,24 +8,38 @@ import { DatabaseModule } from '@database';
 import { coreProviders } from '@core/providers';
 import { LocationsService } from './services/locations.service';
 import { CataloguesService } from './services/catalogues.service';
+import { CategoriesController } from './controllers/categories.controller';
+import { CategoriesService } from './services/categories.service';
+import { ProductsController } from './controllers/products.controller';
+import { ProductsService } from './services/products.service';
+import { TransactionsController } from './controllers/transactions.controller';
+import { TransactionsService } from './services/transactions.service';
 
 @Global()
 @Module({
   imports: [DatabaseModule, CacheModule.register()],
   controllers: [
-
     CataloguesController,
     LocationsController,
+    CategoriesController,
+    ProductsController,
+    TransactionsController
   ],
   providers: [
     ...coreProviders,
     CataloguesService,
     LocationsService,
+    CategoriesService,
+    ProductsService,
+    TransactionsService
   ],
   exports: [
     ...coreProviders,
     CataloguesService,
     LocationsService,
+    CategoriesService,
+    ProductsService,
+    TransactionsService
   ],
 })
 export class CoreModule {

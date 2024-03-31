@@ -1,5 +1,6 @@
 export enum RoleEnum {
   ADMIN = 'admin',
+  WORKER = 'worker',
   GUEST = 'guest',
   TEACHER = 'teacher',
   COORDINATOR_CAREER = 'coordinator-career',

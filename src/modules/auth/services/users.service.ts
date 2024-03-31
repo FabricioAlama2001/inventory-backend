@@ -18,6 +18,7 @@ export class UsersService {
 
     async create(payload: CreateUserDto | SeedUserDto): Promise<UserEntity> {
         const newUser = this.repository.create(payload);
+        
         return await this.repository.save(newUser);
     }
 
@@ -31,7 +32,7 @@ export class UsersService {
     }
 
     async findAll(params?: FilterUserDto): Promise<ServiceResponseHttpModel> {
-        const relations = {roles: true, careers: true};
+        const relations = {roles: true};
         //Pagination & Filter by Search
         if (params?.limit > 0 && params?.page >= 0) {
             return await this.paginateAndFilter(params, relations);

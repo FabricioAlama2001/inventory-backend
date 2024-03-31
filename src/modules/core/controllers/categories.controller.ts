@@ -18,7 +18,7 @@ import { CategoriesService } from '../services/categories.service';
 
 @ApiTags('Categories')
 @Controller('categories')
-export class CategoryController {
+export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) {
     }
 

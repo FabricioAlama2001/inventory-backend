@@ -26,9 +26,7 @@ export class UsersSeeder {
     async run() {
         await this.loadRoles();
         await this.loadCatalogues();
-        await this.createUsers();
-        
-        
+        await this.createUsers();        
     }
 
    
@@ -54,8 +52,7 @@ export class UsersSeeder {
         const reviewerRole = this.roles.find(role => role.code === RoleEnum.REVIEWER);
         const secretaryRole = this.roles.find(role => role.code === RoleEnum.SECRETARY);
         const welfareRole = this.roles.find(role => role.code === RoleEnum.WELFARE);
-
-   
+        const workerRole = this.roles.find(role => role.code === RoleEnum.WORKER);
 
         users.push(
             {
@@ -72,7 +69,7 @@ export class UsersSeeder {
                 email: 'admin@correo.com',
                 lastname: 'Perez',
                 name: 'Admin',
-                password: 'Siaaw23*',
+                password: 'Sicnm24*',
                 passwordChanged: false,
                 personalEmail: faker.internet.email(),
                 roles: [adminRole],
@@ -89,16 +86,16 @@ export class UsersSeeder {
                         ],
                 birthdate: faker.date.birthdate(),
                 cellPhone: '',
-                identification: 'user2',
+                identification: 'user8',
    
-                email: 'coordinator_administrative@correo.com',
+                email: 'worker@correo.com',
                 lastname: 'Administrative',
-                name: 'Coordinator',
-                password: 'Siaaw23*',
+                name: 'Worker',
+                password: 'Sicnm24*',
                 passwordChanged: false,
-                roles: [coordinatorAdministrativeRole],
+                roles: [workerRole],
                 personalEmail: faker.internet.email(),
-                username: 'coordinator_administrative',
+                username: 'worker',
    
             },
             {

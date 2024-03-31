@@ -51,6 +51,10 @@ export class RolesSeeder {
         code: RoleEnum.WELFARE,
         name: 'Bienestar Estudiantil',
       },
+      {
+        code: RoleEnum.WORKER,
+        name: 'Trabajador',
+      },
     );
 
     for (const role of roles) {
