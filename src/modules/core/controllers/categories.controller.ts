@@ -109,4 +109,27 @@ export class CategoriesController {
         };
     }
 
+    @Patch(':id/enable')
+    @HttpCode(HttpStatus.CREATED)
+    async enable(@Param('id', ParseUUIDPipe) id: string): Promise<ResponseHttpModel> {
+        const data = await this.categoriesService.enable(id);
+
+        return {
+            data,
+            message: `Registro habilitado`,
+            title: `Habilitado`,
+        };
+    }
+
+    @Patch(':id/disable')
+    @HttpCode(HttpStatus.CREATED)
+    async disable(@Param('id', ParseUUIDPipe) id: string): Promise<ResponseHttpModel> {
+        const data = await this.categoriesService.disable(id);
+
+        return {
+            data,
+            message: `Registro deshabilitado`,
+            title: `Deshabilitado`,
+        };
+    }
 }

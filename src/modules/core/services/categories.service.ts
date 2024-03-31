@@ -71,4 +71,28 @@ export class CategoriesService {
     async removeAll(payload: any[]): Promise<CategoryEntity[]> {
         return await this.repository.softRemove(payload);
     }
+
+    async enable(id: string) {
+        const data = await this.repository.findOneBy({ id });
+
+        if (!data) {
+            throw new NotFoundException('Registro no encontrado');
+        }
+
+        data.enabled = true;
+
+        return this.repository.save(data);
+    }
+
+    async disable(id: string) {
+        const data = await this.repository.findOneBy({ id });
+
+        if (!data) {
+            throw new NotFoundException('Registro no encontrado');
+        }
+
+        data.enabled = false;
+
+        return this.repository.save(data);
+    }
 }
