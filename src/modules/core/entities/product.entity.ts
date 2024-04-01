@@ -101,7 +101,16 @@ export class ProductEntity {
     @Column({
         name: 'selling_price',
         type: 'float',
+        nullable: true,
         comment: 'Costo del producto al publico',
     })
     sellingPrice: number;
+
+    @Column({
+        name: 'stock',
+        type: 'float',
+        nullable: true,
+        comment: 'Stock actual del producto',
+    })
+    stock: number;
 }

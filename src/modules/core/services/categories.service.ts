@@ -1,13 +1,7 @@
-import {CACHE_MANAGER, Inject, Injectable, NotFoundException} from '@nestjs/common';
-import {FindOptionsWhere, ILike, Repository} from 'typeorm';
-import {CreateCatalogueDto, FilterCatalogueDto, PaginationDto, UpdateCatalogueDto} from '@core/dto';
-import {CatalogueEntity, CategoryEntity} from '@core/entities';
-import {CacheEnum, CatalogueTypeEnum, CoreRepositoryEnum} from '@shared/enums';
-import {ReadUserDto} from '@auth/dto';
-import {UserEntity} from '@auth/entities';
-import {plainToInstance} from 'class-transformer';
-import {ServiceResponseHttpModel} from '@shared/models';
-
+import {Inject, Injectable, NotFoundException} from '@nestjs/common';
+import {Repository} from 'typeorm';
+import {CategoryEntity} from '@core/entities';
+import {CoreRepositoryEnum} from '@shared/enums';
 
 @Injectable()
 export class CategoriesService {
