@@ -50,7 +50,7 @@ export class ProductsService {
   }
 
   async findOne(id: string): Promise<ProductEntity> {
-    const entity = await this.repository.findOne({ where: { id } });
+    const entity = await this.repository.findOne({ relations:{category: true}, where: { id } });
 
     if (!entity) {
       throw new NotFoundException('Registro no encontrado');
