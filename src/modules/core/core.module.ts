@@ -1,3 +1,4 @@
+import { TransactionDetailsController } from './controllers/transaction-details.controller';
 import { Global, Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import {
@@ -23,7 +24,8 @@ import { TransactionsService } from './services/transactions.service';
     LocationsController,
     CategoriesController,
     ProductsController,
-    TransactionsController
+    TransactionsController,
+    TransactionDetailsController
   ],
   providers: [
     ...coreProviders,
@@ -31,7 +33,8 @@ import { TransactionsService } from './services/transactions.service';
     LocationsService,
     CategoriesService,
     ProductsService,
-    TransactionsService
+    TransactionsService,
+    TransactionDetailsController
   ],
   exports: [
     ...coreProviders,
@@ -39,7 +42,8 @@ import { TransactionsService } from './services/transactions.service';
     LocationsService,
     CategoriesService,
     ProductsService,
-    TransactionsService
+    TransactionsService,
+    TransactionDetailsController
   ],
 })
 export class CoreModule {
