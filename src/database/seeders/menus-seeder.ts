@@ -27,7 +27,7 @@ export class MenusSeeder {
         type: MenuTypeEnum.LEFT_SIDE,
       },
       {
-        code: RoleEnum.TEACHER,
+        code: RoleEnum.WORKER,
         icon: PrimeIcons.LIST,
         isVisible: true,
         label: 'Docentes',
@@ -35,7 +35,7 @@ export class MenusSeeder {
         type: MenuTypeEnum.LEFT_SIDE,
       },
       {
-        code: RoleEnum.STUDENT,
+        code: RoleEnum.APPROVER,
         icon: PrimeIcons.LIST,
         isVisible: true,
         label: 'Estudiantes',
@@ -43,7 +43,7 @@ export class MenusSeeder {
         type: MenuTypeEnum.LEFT_SIDE,
       },
       {
-        code: RoleEnum.COORDINATOR_ADMINISTRATIVE,
+        code: RoleEnum.PROVIDER,
         icon: PrimeIcons.LIST,
         isVisible: true,
         label: 'Coordinador Administrativo',
@@ -51,42 +51,10 @@ export class MenusSeeder {
         type: MenuTypeEnum.LEFT_SIDE,
       },
       {
-        code: RoleEnum.COORDINATOR_CAREER,
+        code: RoleEnum.CUSTOMER,
         icon: PrimeIcons.LIST,
         isVisible: true,
         label: 'Coordinador de Carrera',
-        order: 1,
-        type: MenuTypeEnum.LEFT_SIDE,
-      },
-      {
-        code: RoleEnum.RECTOR,
-        icon: PrimeIcons.LIST,
-        isVisible: true,
-        label: 'Rectorado',
-        order: 1,
-        type: MenuTypeEnum.LEFT_SIDE,
-      },
-      {
-        code: RoleEnum.REVIEWER,
-        icon: PrimeIcons.LIST,
-        isVisible: true,
-        label: 'Revisor',
-        order: 1,
-        type: MenuTypeEnum.LEFT_SIDE,
-      },
-      {
-        code: RoleEnum.SECRETARY,
-        icon: PrimeIcons.LIST,
-        isVisible: true,
-        label: 'Secretaría',
-        order: 1,
-        type: MenuTypeEnum.LEFT_SIDE,
-      },
-      {
-        code: RoleEnum.WELFARE,
-        icon: PrimeIcons.LIST,
-        isVisible: true,
-        label: 'Bienestar Estudiantil',
         order: 1,
         type: MenuTypeEnum.LEFT_SIDE,
       },
@@ -130,7 +98,7 @@ export class MenusSeeder {
     }
 
     /** Coordinator Career Role **/
-    const coordinatorCareer = menusAll.find(menu => menu.code === RoleEnum.COORDINATOR_CAREER);
+    const coordinatorCareer = menusAll.find(menu => menu.code === RoleEnum.WORKER);
 
     menus = [];
     menus.push(
@@ -216,94 +184,6 @@ export class MenusSeeder {
       },
     );
 
-    /** Reviewer Role **/
-    const reviewerMenu = menusAll.find(menu => menu.code === RoleEnum.REVIEWER);
-    menus.push(
-      {
-        code: 'inscription-list',
-        icon: 'pi pi-users',
-        isVisible: true,
-        label: 'Administración de Inscripciones',
-        order: 1,
-        routerLink: '/core/reviewer/inscriptions',
-        type: MenuTypeEnum.LEFT_SIDE,
-        parent: reviewerMenu,
-      },
-    );
-
-    const secretaryMenu = menusAll.find(menu => menu.code === RoleEnum.SECRETARY);
-
-    menus.push(
-      {
-        code: 'enrollment-list',
-        icon: 'pi pi-users',
-        isVisible: true,
-        label: 'Administración de Matrículas',
-        order: 1,
-        routerLink: '/core/secretary/enrollments',
-        type: MenuTypeEnum.LEFT_SIDE,
-        parent: secretaryMenu,
-      },
-    );
-
-    /** Student Role **/
-    const studentMenu = menusAll.find(menu => menu.code === RoleEnum.STUDENT);
-
-    menus.push(
-      {
-        code: 'enrollment-application',
-        icon: 'pi pi-users',
-        isVisible: true,
-        label: 'Solicitud de Matrícula',
-        order: 1,
-        routerLink: '/core/student/enrollment-application',
-        type: MenuTypeEnum.LEFT_SIDE,
-        parent: studentMenu,
-      },
-      {
-        code: 'enrollment-subjects',
-        icon: 'pi pi-users',
-        isVisible: true,
-        label: 'Asignaturas',
-        order: 2,
-        routerLink: '/core/student/enrollment-subjects',
-        type: MenuTypeEnum.LEFT_SIDE,
-        parent: studentMenu,
-      },
-    );
-
-    /** Teacher Role **/
-    const teacherMenu = menusAll.find(menu => menu.code === RoleEnum.TEACHER);
-
-    menus.push(
-      {
-        code: 'teacher-subjects',
-        icon: 'pi pi-book',
-        isVisible: true,
-        label: 'Mis Asignaturas',
-        order: 1,
-        routerLink: '/core/teacher/teacher-subjects',
-        type: MenuTypeEnum.LEFT_SIDE,
-        parent: teacherMenu,
-      },
-    );
-
-    /** Welfare Role **/
-    const welfareMenu = menusAll.find(menu => menu.code === RoleEnum.WELFARE);
-
-    menus.push(
-      {
-        code: 'enrollments',
-        icon: 'pi pi-verified',
-        isVisible: true,
-        label: 'Matriculados',
-        order: 1,
-        routerLink: '/core/welfare/enrollments',
-        type: MenuTypeEnum.LEFT_SIDE,
-        parent: welfareMenu,
-      },
-    );
-
     for (const menu of menus) {
       await this.menusService.create(menu);
     }
@@ -316,28 +196,8 @@ export class MenusSeeder {
     role.menus = menusAll.filter(menu => menu.code === RoleEnum.ADMIN);
     await this.rolesService.createMenus(role);
 
-    role = await this.rolesService.findByCode(RoleEnum.STUDENT);
-    role.menus = menusAll.filter(menu => menu.code === RoleEnum.STUDENT);
-    await this.rolesService.createMenus(role);
-
-    role = await this.rolesService.findByCode(RoleEnum.TEACHER);
-    role.menus = menusAll.filter(menu => menu.code === RoleEnum.TEACHER);
-    await this.rolesService.createMenus(role);
-
-    role = await this.rolesService.findByCode(RoleEnum.COORDINATOR_CAREER);
-    role.menus = menusAll.filter(menu => menu.code === RoleEnum.COORDINATOR_CAREER);
-    await this.rolesService.createMenus(role);
-
-    role = await this.rolesService.findByCode(RoleEnum.REVIEWER);
-    role.menus = menusAll.filter(menu => menu.code === RoleEnum.REVIEWER);
-    await this.rolesService.createMenus(role);
-
-    role = await this.rolesService.findByCode(RoleEnum.SECRETARY);
-    role.menus = menusAll.filter(menu => menu.code === RoleEnum.SECRETARY);
-    await this.rolesService.createMenus(role);
-
-    role = await this.rolesService.findByCode(RoleEnum.WELFARE);
-    role.menus = menusAll.filter(menu => menu.code === RoleEnum.WELFARE);
+    role = await this.rolesService.findByCode(RoleEnum.WORKER);
+    role.menus = menusAll.filter(menu => menu.code === RoleEnum.WORKER);
     await this.rolesService.createMenus(role);
   }
 }

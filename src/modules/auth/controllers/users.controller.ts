@@ -33,8 +33,7 @@ export class UsersController {
     const serviceResponse = await this.usersService.catalogue();
 
     return {
-      data: serviceResponse.data,
-      pagination: serviceResponse.pagination,
+      data: serviceResponse,
       message: `catalogue`,
       title: `Catalogue`,
     };

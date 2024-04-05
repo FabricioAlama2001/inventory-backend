@@ -20,40 +20,20 @@ export class RolesSeeder {
         name: 'Administrador',
       },
       {
-        code: RoleEnum.TEACHER,
-        name: 'Docente',
-      },
-      {
-        code: RoleEnum.STUDENT,
-        name: 'Estudiante',
-      },
-      {
-        code: RoleEnum.COORDINATOR_ADMINISTRATIVE,
-        name: 'Coordinador Administrativo',
-      },
-      {
-        code: RoleEnum.COORDINATOR_CAREER,
-        name: 'Coordinador Carrera',
-      },
-      {
-        code: RoleEnum.RECTOR,
-        name: 'Rector',
-      },
-      {
-        code: RoleEnum.REVIEWER,
-        name: 'Revisor',
-      },
-      {
-        code: RoleEnum.SECRETARY,
-        name: 'Secretaria',
-      },
-      {
-        code: RoleEnum.WELFARE,
-        name: 'Bienestar Estudiantil',
-      },
-      {
         code: RoleEnum.WORKER,
         name: 'Trabajador',
+      },
+      {
+        code: RoleEnum.APPROVER,
+        name: 'Aprobador',
+      },
+      {
+        code: RoleEnum.PROVIDER,
+        name: 'Proveedor',
+      },
+      {
+        code: RoleEnum.CUSTOMER,
+        name: 'Cliente',
       },
     );
 

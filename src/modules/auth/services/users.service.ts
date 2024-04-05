@@ -22,13 +22,8 @@ export class UsersService {
         return await this.repository.save(newUser);
     }
 
-    async catalogue(): Promise<ServiceResponseHttpModel> {
-        const response = await this.repository.findAndCount({take: 1000});
-
-        return {
-            data: response[0],
-            pagination: {totalItems: response[1], limit: 10},
-        };
+    async catalogue(): Promise<UserEntity[]> {
+        return await this.repository.find({relations:{roles:true}});
     }
 
     async findAll(params?: FilterUserDto): Promise<ServiceResponseHttpModel> {
