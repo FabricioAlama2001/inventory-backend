@@ -27,7 +27,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Catalogue' })
-  @Get('catalogue')
+  @Get('catalogues')
   @HttpCode(HttpStatus.OK)
   async catalogue(): Promise<ResponseHttpModel> {
     const serviceResponse = await this.usersService.catalogue();
