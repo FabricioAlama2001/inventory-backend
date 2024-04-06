@@ -12,7 +12,6 @@ import { CataloguesService } from 'src/modules/core/services/catalogues.service'
 export class UsersSeeder {
   private identificationTypes: CatalogueEntity[] = [];
   private roles: RoleEntity[] = [];
-
   constructor(private rolesService: RolesService, private usersService: UsersService, private cataloguesService: CataloguesService) {}
 
   async run() {
@@ -72,10 +71,9 @@ export class UsersSeeder {
         birthdate: faker.date.birthdate(),
         cellPhone: '',
         identification: 'worker',
-
         email: 'worker@correo.com',
-        lastname: 'Worker',
-        name: 'Worker',
+        lastname: 'Cedillo Alama',
+        name: 'Juan Carlos',
         password: 'Sicnm24*',
         passwordChanged: false,
         roles: [workerRole],
@@ -92,11 +90,10 @@ export class UsersSeeder {
           ],
         birthdate: faker.date.birthdate(),
         cellPhone: '',
-        identification: 'approver',
-
+        identification: '1234567892',
         email: 'approver@correo.com',
-        lastname: 'Aprobador',
-        name: 'Aprobador',
+        lastname: 'Sandoval Tapia',
+        name: 'Luis Andres',
         password: 'Sicnm24*',
         passwordChanged: false,
         roles: [approverRole],
@@ -113,10 +110,10 @@ export class UsersSeeder {
           ],
         birthdate: faker.date.birthdate(),
         cellPhone: '',
-        identification: 'provider',
+        identification: '1234567891',
         email: 'provider@correo.com',
-        lastname: 'Proveedor',
-        name: 'Proveedor',
+        lastname: 'Alama Duarte',
+        name: 'Steven Fabricio',
         password: 'Sicnm24*',
         passwordChanged: false,
         personalEmail: faker.internet.email(),
@@ -133,10 +130,10 @@ export class UsersSeeder {
           ],
         birthdate: faker.date.birthdate(),
         cellPhone: '',
-        identification: 'customer',
+        identification: '1234567890',
         email: 'customer@correo.com',
-        lastname: 'Cliente',
-        name: 'Cliente',
+        lastname: 'Tamayo Lopez',
+        name: 'Cesar Mauricio',
         password: 'Sicnm24*',
         passwordChanged: false,
         personalEmail: faker.internet.email(),

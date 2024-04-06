@@ -16,6 +16,7 @@ import { ProductsService } from './services/products.service';
 import { TransactionsController } from './controllers/transactions.controller';
 import { TransactionsService } from './services/transactions.service';
 import { TransactionDetailsService } from './services/transaction-datails.service';
+import { SignaturesService } from './services/signatures.service';
 
 @Global()
 @Module({
@@ -35,7 +36,8 @@ import { TransactionDetailsService } from './services/transaction-datails.servic
     CategoriesService,
     ProductsService,
     TransactionsService,
-    TransactionDetailsService
+    TransactionDetailsService,
+    SignaturesService,
   ],
   exports: [
     ...coreProviders,
@@ -44,7 +46,8 @@ import { TransactionDetailsService } from './services/transaction-datails.servic
     CategoriesService,
     ProductsService,
     TransactionsService,
-    TransactionDetailsService
+    TransactionDetailsService,
+    SignaturesService,
   ],
 })
 export class CoreModule {

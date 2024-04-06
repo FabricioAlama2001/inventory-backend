@@ -4,11 +4,11 @@ import {
     DeleteDateColumn,
     Entity,
 
-    OneToMany,
+    OneToMany, OneToOne,
     PrimaryGeneratedColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
 } from 'typeorm';
-import { ProductEntity, TransactionDetailEntity } from '@core/entities';
+import { ProductEntity, SignatureEntity, TransactionDetailEntity } from '@core/entities';
 
 //Cambios realizados creacion de la entidad
 
@@ -53,6 +53,10 @@ export class TransactionEntity {
     /** Inverse Relationship **/
     @OneToMany(() => TransactionDetailEntity, transactionDetail => transactionDetail.transaction)
     transactionDetails: TransactionDetailEntity[];
+
+    @OneToOne(() => SignatureEntity, signature => signature.transaction)
+    signature: SignatureEntity;
+
     //
     @OneToMany(() => ProductEntity, product => product.category)
     products: ProductEntity[];

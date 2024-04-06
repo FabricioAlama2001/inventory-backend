@@ -1,69 +1,67 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
-import { CoreRepositoryEnum } from "@shared/enums";
-import { Repository } from "typeorm";
-import { ProductEntity } from "../entities/product.entity";
-import { TransactionDetailEntity } from "../entities/transaction-detail.entity";
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { CoreRepositoryEnum } from '@shared/enums';
+import { Repository } from 'typeorm';
+import { ProductEntity } from '../entities/product.entity';
+import { TransactionDetailEntity } from '../entities/transaction-detail.entity';
 
 @Injectable()
 export class TransactionDetailsService {
-    constructor(@Inject(CoreRepositoryEnum.PRODUCT_REPOSITORY) private readonly repository: Repository<TransactionDetailEntity>){   
+  constructor(@Inject(CoreRepositoryEnum.TRANSACTION_DETAIL_REPOSITORY) private readonly repository: Repository<TransactionDetailEntity>) {
+  }
+
+  async create(transactionId: string, payload: any): Promise<any> {
+    const newEntity = this.repository.create();
+    newEntity.transactionId = transactionId;
+    newEntity.productId = payload.product.id;
+    newEntity.observation = payload.observation;
+    newEntity.quantity = payload.quantity;
+
+    return await this.repository.save(newEntity);
+  }
+
+  async update(id: string, payload: any): Promise<any> {
+    const entity = await this.repository.findOneBy({ id });
+
+    if (!entity) {
+      throw new NotFoundException('Registro no encontrado');
     }
 
-    async create(payload: any): Promise<any>{
-        const newEntity = this.repository.create();
-        newEntity.transactionId=payload.transactionId;
-        newEntity.productId=payload.productId;
-        newEntity.observation=payload.observation;
-        newEntity.quantity = payload.quantity;
-        
-        
+    entity.transactionId = payload.transactionId;
+    entity.productId = payload.productId;
+    entity.observation = payload.observation;
+    entity.quantity = payload.quantity;
 
-         return await this.repository.save(newEntity);
-    } 
 
-    async update(id:string,payload:any): Promise<any>{
-        const entity = await this.repository.findOneBy({id});
+    return await this.repository.save(entity);
+  }
 
-        if(!entity){
-            throw new NotFoundException('Registro no encontrado');
-        }
 
-        entity.transactionId=payload.transactionId;  
-        entity.productId=payload.productId;
-        entity.observation=payload.observation;
-        entity.quantity = payload.quantity;
-          
-        
-         return await this.repository.save(entity);
+  async findOne(id: string): Promise<any> {
+    const entity = await this.repository.findOne({ where: { id } });
+
+    if (!entity) {
+      throw new NotFoundException('Registro no encontrado');
     }
 
-   
-       async findOne(id:string): Promise<any>{
-        const entity = await this.repository.findOne({where:{id}});
+    return entity;
+  }
 
-        if(!entity){
-            throw new NotFoundException('Registro no encontrado');
-        }
+  async findAll(): Promise<any> {
+    const entities = await this.repository.find();
 
-         return entity;
-    }   
+    return entities;
 
-    async findAll(): Promise<any>{
-        const entities = await this.repository.find();
+  }
 
-       return entities;
-        
+  async remove(id: string): Promise<TransactionDetailEntity> {
+    const data = await this.repository.findOneBy({ id });
+
+    if (!data) {
+      throw new NotFoundException('Registro no encontrado');
     }
 
-    async remove(id: string): Promise<TransactionDetailEntity> {
-        const data = await this.repository.findOneBy({id});
+    return await this.repository.softRemove(data);
+  }
 
-        if (!data) {
-            throw new NotFoundException('Registro no encontrado');
-        }
 
-        return await this.repository.softRemove(data);
-    }
-
-    
 }

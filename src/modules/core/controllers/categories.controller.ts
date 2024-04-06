@@ -80,8 +80,8 @@ export class CategoriesController {
 
         return {
             data: data,
-            message: `Catalogue updated ${id}`,
-            title: `Updated`,
+            message: `Registro Actualizado`,
+            title: `Actualización`,
         };
     }
 
@@ -92,8 +92,8 @@ export class CategoriesController {
 
         return {
             data,
-            message: `Catalogue deleted ${id}`,
-            title: `Deleted`,
+            message: `Registro Eliminado`,
+            title: `Eliminación`,
         };
     }
 
@@ -116,7 +116,7 @@ export class CategoriesController {
 
         return {
             data,
-            message: `Registro habilitado`,
+            message: `Registro Habilitado`,
             title: `Habilitado`,
         };
     }
@@ -128,7 +128,7 @@ export class CategoriesController {
 
         return {
             data,
-            message: `Registro deshabilitado`,
+            message: `Registro Deshabilitado`,
             title: `Deshabilitado`,
         };
     }
