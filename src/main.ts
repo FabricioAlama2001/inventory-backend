@@ -33,7 +33,7 @@ async function bootstrap() {
 
     app.useStaticAssets(join(process.cwd(), 'assets'));
 
-    const documentBuilder = new DocumentBuilder().setTitle('API SIAAW')
+    const documentBuilder = new DocumentBuilder().setTitle('API SICNM')
         .setDescription('App Description')
         .setVersion('3')
         .addBearerAuth()
