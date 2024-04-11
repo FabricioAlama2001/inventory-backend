@@ -1,20 +1,23 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { ResponseHttpModel } from '@shared/models';
-import { TransactionDetailsService } from '../services/transaction-datails.service';
+import { IncomesService } from '../services/incomes.service';
+import { Auth, User } from '@auth/decorators';
+import { UserEntity } from '@auth/entities';
 
 
-@Controller('transaction-details')
-export class TransactionDetailsController {
-  constructor(private readonly transactionDetailsService: TransactionDetailsService) {
+@Controller('incomes')
+export class IncomesController {
+  constructor(private readonly incomesService: IncomesService) {
 
   }
 
+  @Auth()
   @Post()
-  async create(@Body() payload: any): Promise<ResponseHttpModel> {
-    // const data = await this.transactionDetailsService.create(payload);
+  async create(@User() user: UserEntity, @Body() payload: any): Promise<ResponseHttpModel> {
+    const data = await this.incomesService.create(user.id,payload);
 
     return {
-      data:null,
+      data,
       message: 'Registro creado',
       title: '',
     };
@@ -22,11 +25,11 @@ export class TransactionDetailsController {
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() payload: any): Promise<ResponseHttpModel> {
-    const data = await this.transactionDetailsService.update(id, payload);
+    const data = await this.incomesService.update(id, payload);
 
     return {
       data,
-      message: 'Detalle de Transacción actualizado',
+      message: 'Transacción actualizado',
       title: '',
     };
   }
@@ -34,11 +37,11 @@ export class TransactionDetailsController {
   @Delete(':id')
   @HttpCode(HttpStatus.CREATED)
   async remove(@Param('id', ParseUUIDPipe) id: string): Promise<ResponseHttpModel> {
-    const data = await this.transactionDetailsService.remove(id);
+    const data = await this.incomesService.remove(id);
 
     return {
       data,
-      message: `Detail Transaction deleted ${id}`,
+      message: `Transaction deleted ${id}`,
       title: `Deleted`,
     };
   }
@@ -46,7 +49,7 @@ export class TransactionDetailsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async findAll(): Promise<ResponseHttpModel> {
-    const response = await this.transactionDetailsService.findAll();
+    const response = await this.incomesService.findAll();
 
     return {
       data: response,
@@ -58,7 +61,7 @@ export class TransactionDetailsController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<ResponseHttpModel> {
-    const data = await this.transactionDetailsService.findOne(id);
+    const data = await this.incomesService.findOne(id);
 
     return {
       data,

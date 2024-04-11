@@ -9,7 +9,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
-import { CategoryEntity, TransactionDetailEntity } from '@core/entities';
+import { CategoryEntity,TransactionInDetailEntity, TransactionOutDetailEntity } from '@core/entities';
 //Cambios realizados creacion de la entidad
 @Entity('products', {schema: 'core'})
 export class ProductEntity {
@@ -50,8 +50,11 @@ export class ProductEntity {
     enabled: boolean;
     
     /** Inverse Relationship **/
-    @OneToMany(() => TransactionDetailEntity, transactionDetail => transactionDetail.product)
-    transactionDetails: TransactionDetailEntity[];
+    @OneToMany(() => TransactionInDetailEntity, transactionDetail => transactionDetail.product)
+    transactionInDetails: TransactionInDetailEntity[];
+
+    @OneToMany(() => TransactionOutDetailEntity, transactionDetail => transactionDetail.product)
+    transactionOutDetails: TransactionOutDetailEntity[];
 
     /** Foreign Keys **/
     @ManyToOne(() => CategoryEntity, category => category.products)

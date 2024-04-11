@@ -2,19 +2,25 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CoreRepositoryEnum } from '@shared/enums';
 import { Repository } from 'typeorm';
 import { ProductEntity } from '../entities/product.entity';
-import { TransactionDetailEntity } from '../entities/transaction-detail.entity';
+import { TransactionOutDetailEntity } from '../entities/transaction-out-detail.entity';
+import { ExpenseEntity } from '../entities/expense.entity';
 
 @Injectable()
-export class TransactionDetailsService {
-  constructor(@Inject(CoreRepositoryEnum.TRANSACTION_DETAIL_REPOSITORY) private readonly repository: Repository<TransactionDetailEntity>) {
+export class TransactionOutDetailsService {
+  constructor(@Inject(CoreRepositoryEnum.TRANSACTION_OUT_DETAIL_REPOSITORY) private readonly repository: Repository<TransactionOutDetailEntity>) {
   }
 
-  async create(transactionId: string, payload: any): Promise<any> {
+  async create(expenses: ExpenseEntity, payload: any): Promise<any> {
     const newEntity = this.repository.create();
-    newEntity.transactionId = transactionId;
+    newEntity.expenseId = expenses.id;
     newEntity.productId = payload.product.id;
     newEntity.observation = payload.observation;
-    newEntity.quantity = payload.quantity;
+
+    if (expenses.enabled) {
+      newEntity.quantity = Math.abs(payload.quantity);
+    } else {
+      newEntity.quantity = -Math.abs(payload.quantity);
+    }
 
     return await this.repository.save(newEntity);
   }
@@ -26,7 +32,7 @@ export class TransactionDetailsService {
       throw new NotFoundException('Registro no encontrado');
     }
 
-    entity.transactionId = payload.transactionId;
+    entity.expenseId = payload.expensesId;
     entity.productId = payload.productId;
     entity.observation = payload.observation;
     entity.quantity = payload.quantity;
@@ -53,7 +59,7 @@ export class TransactionDetailsService {
 
   }
 
-  async remove(id: string): Promise<TransactionDetailEntity> {
+  async remove(id: string): Promise<TransactionOutDetailEntity> {
     const data = await this.repository.findOneBy({ id });
 
     if (!data) {

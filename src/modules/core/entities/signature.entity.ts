@@ -9,11 +9,11 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
-import { ProductEntity, TransactionDetailEntity, TransactionEntity } from '@core/entities';
+import { ExpenseEntity, IncomeEntity, ProductEntity, TransactionInDetailEntity, TransactionOutDetailEntity } from '@core/entities';
 import { UserEntity } from '@auth/entities';
 //Cambios realizados creacion de la entidad
 
-@Entity('signatures', {schema: 'core'})
+@Entity('signatures', { schema: 'core' })
 export class SignatureEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -50,38 +50,49 @@ export class SignatureEntity {
     })
     //Depende de la logica - este disponible o no 
     enabled: boolean;
-    
+
     /** Inverse Relationship **/
-    @OneToMany(() => TransactionDetailEntity, transactionDetail => transactionDetail.transaction)
-    transactionDetails: TransactionDetailEntity[];
+    @OneToMany(() => TransactionInDetailEntity, transactionDetail => transactionDetail.income)
+    transactionInDetails: TransactionInDetailEntity[];
+
+    @OneToMany(() => TransactionOutDetailEntity, transactionDetail => transactionDetail.expense)
+    transactionOutDetails: TransactionOutDetailEntity[];
     //
     @OneToMany(() => ProductEntity, product => product.category)
     products: ProductEntity[];
 
     /** Foreign Keys **/
     @ManyToOne(() => UserEntity)
-    @JoinColumn({name: 'authorizer_id'})
-    authorizer: UserEntity; 
-    @Column({type: 'uuid', name: 'authorizer_id',nullable: true, comment: ''})
+    @JoinColumn({ name: 'authorizer_id' })
+    authorizer: UserEntity;
+    @Column({ type: 'uuid', name: 'authorizer_id', nullable: true, comment: '' })
     authorizerId: string;
 
     @ManyToOne(() => UserEntity)
-    @JoinColumn({name: 'dispatcher_id'})
+    @JoinColumn({ name: 'dispatcher_id' })
     dispatcher: UserEntity;
-    @Column({type: 'uuid', name: 'dispatcher_id',nullable: true, comment: ''})
+    @Column({ type: 'uuid', name: 'dispatcher_id', nullable: true, comment: '' })
     dispatcherId: string;
 
     @ManyToOne(() => UserEntity)
-    @JoinColumn({name: 'receiver_id'})
+    @JoinColumn({ name: 'receiver_id' })
     receiver: UserEntity;
-    @Column({type: 'uuid', name: 'receiver_id',nullable: true, comment: ''})
+    @Column({ type: 'uuid', name: 'receiver_id', nullable: true, comment: '' })
     receiverId: string;
-    
-    @ManyToOne(() => TransactionEntity, transaction => transaction.transactionDetails)
-    @JoinColumn({name: 'transaction_id'})
-    transaction: TransactionEntity;
-    @Column({type: 'uuid', name: 'transaction_id', comment: ''})
-    transactionId: string;
 
-    /** Columns **/  
+    @ManyToOne(() => IncomeEntity, transaction => transaction.signature)
+    @JoinColumn({ name: 'income_id' })
+    income: IncomeEntity;
+    @Column({ type: 'uuid', nullable: true, name: 'income_id', comment: '' })
+    incomeId: string;
+
+    @ManyToOne(() => ExpenseEntity, transaction => transaction.signature)
+    @JoinColumn({ name: 'expense_id' })
+    expense: ExpenseEntity;
+    @Column({ type: 'uuid', nullable: true, name: 'expense_id', comment: '' })
+    expenseId: string;
+
+    @Column({ type: 'varchar', nullable: true, name: 'model_id', comment: '' })
+    modelId: string;
+    /** Columns **/
 }

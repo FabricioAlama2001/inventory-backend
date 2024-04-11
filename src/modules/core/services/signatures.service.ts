@@ -9,9 +9,19 @@ export class SignaturesService {
   constructor(@Inject(CoreRepositoryEnum.SIGNATURE_REPOSITORY) private readonly repository: Repository<SignatureEntity>) {
   }
 
-  async create(transactionId: string, payload: any, userId: string): Promise<any> {
+  async createIncomeSignature(incomeId: string, payload: any, userId: string): Promise<any> {
     const newEntity = this.repository.create();
-    newEntity.transactionId = transactionId;
+    newEntity.incomeId = incomeId;
+    newEntity.authorizerId = payload.user.id;
+    newEntity.dispatcherId = userId;
+    newEntity.receiverId = payload.client.id;
+
+    return await this.repository.save(newEntity);
+  }
+
+  async createExpenseSignatura(expenseId: string, payload: any, userId: string): Promise<any> {
+    const newEntity = this.repository.create();
+    newEntity.expenseId = expenseId;
     newEntity.authorizerId = payload.user.id;
     newEntity.dispatcherId = userId;
     newEntity.receiverId = payload.client.id;
@@ -29,7 +39,7 @@ export class SignaturesService {
     entity.authorizerId = payload.authorizerId;
     entity.dispatcherId = payload.dispatcherId;
     entity.receiverId = payload.receiverId;
-    entity.transactionId = payload.transactionId;
+    entity.modelId = payload.modelId;
     return await this.repository.save(entity);
   }
 

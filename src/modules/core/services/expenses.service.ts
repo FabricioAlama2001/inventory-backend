@@ -1,17 +1,16 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { TransactionEntity } from '../entities/transaction.entity';
 import { CoreRepositoryEnum } from '@shared/enums';
 import { Repository } from 'typeorm';
-import { TransactionDetailsService } from './transaction-datails.service';
+import { TransactionOutDetailsService } from './transaction-out-datails.service';
 import { SignaturesService } from './signatures.service';
-import { ProductEntity } from '@core/entities';
+import { ExpenseEntity, ProductEntity } from '@core/entities';
 
 @Injectable()
-export class TransactionsService {
+export class ExpensesService {
   constructor(
-    @Inject(CoreRepositoryEnum.TRANSACTION_REPOSITORY) private readonly repository: Repository<TransactionEntity>,
+    @Inject(CoreRepositoryEnum.EXPENSE_REPOSITORY) private readonly repository: Repository<ExpenseEntity>,
     @Inject(CoreRepositoryEnum.PRODUCT_REPOSITORY) private readonly productRepository: Repository<ProductEntity>,
-    private readonly transactionDetailsService: TransactionDetailsService,
+    private readonly transactionDetailsService: TransactionOutDetailsService,
     private readonly signaturesService: SignaturesService,
   ) {
   }
@@ -21,25 +20,19 @@ export class TransactionsService {
     newEntity.code = payload.code;
     newEntity.description = payload.description;
     newEntity.date = payload.date;
-    newEntity.type = payload.type;
 
     const transactionCreated = await this.repository.save(newEntity);
 
     for (const item of payload.transactionDetails) {
-      await this.transactionDetailsService.create(transactionCreated.id, item);
+      await this.transactionDetailsService.create(transactionCreated, item);
 
       const product = await this.productRepository.findOneBy({ id: item.product.id });
-
-      if (payload.type) {
-        product.stock += item.quantity;
-      } else {
-        product.stock -= item.quantity;
-      }
+      product.stock -= Math.abs(item.quantity);
 
       await this.productRepository.save(product);
     }
 
-    await this.signaturesService.create(transactionCreated.id, payload, userId);
+    await this.signaturesService.createExpenseSignatura(transactionCreated.id, payload, userId);
 
     return transactionCreated;
   }
@@ -54,7 +47,6 @@ export class TransactionsService {
     entity.code = payload.code;
     entity.description = payload.description;
     entity.date = payload.date;
-    entity.type = payload.type;
 
     return await this.repository.save(entity);
   }
@@ -78,7 +70,7 @@ export class TransactionsService {
 
   }
 
-  async remove(id: string): Promise<TransactionEntity> {
+  async remove(id: string): Promise<ExpenseEntity> {
     const data = await this.repository.findOneBy({ id });
 
     if (!data) {

@@ -8,11 +8,11 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from 'typeorm';
-import {TransactionEntity,ProductEntity } from '@core/entities';
+import {ExpenseEntity, ProductEntity } from '@core/entities';
 
 //Cambios realizados creacion de la entidad
-@Entity('transaction_details', {schema: 'core'})
-export class TransactionDetailEntity {
+@Entity('transaction_out_details', {schema: 'core'})
+export class TransactionOutDetailEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -50,13 +50,13 @@ export class TransactionDetailEntity {
     enabled: boolean;
 
     /** Foreign Keys **/
-    @ManyToOne(() => TransactionEntity, transaction => transaction.transactionDetails)
-    @JoinColumn({name: 'transaction_id'})
-    transaction: TransactionEntity;
-    @Column({type: 'uuid', name: 'transaction_id', comment: ''})
-    transactionId: string;
+    @ManyToOne(() => ExpenseEntity, transaction => transaction.transactionOutDetails)
+    @JoinColumn({name: 'expense_id'})
+    expense: ExpenseEntity;
+    @Column({type: 'uuid', name: 'expense_id', comment: ''})
+    expenseId: string;
 
-    @ManyToOne(() => ProductEntity , product => product.transactionDetails)
+    @ManyToOne(() => ProductEntity , product => product.transactionOutDetails)
     @JoinColumn({name: 'product_id'})
     product: ProductEntity;
     @Column({type: 'uuid', name: 'product_id', comment: ''})

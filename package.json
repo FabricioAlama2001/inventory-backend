@@ -51,7 +51,6 @@
     "nodemailer": "^6.9.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
-    "pdfkit": "^0.13.0",
     "pdfkit-table-ts": "^0.0.14",
     "pg": "^8.11.1",
     "qrcode": "^1.5.3",

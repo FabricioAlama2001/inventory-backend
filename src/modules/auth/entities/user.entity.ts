@@ -19,7 +19,7 @@ import {Exclude} from 'class-transformer';
 import {RoleEntity} from '@auth/entities';
 import {
    
-    CatalogueEntity, TransactionEntity,
+    CatalogueEntity
     } from '@core/entities';
 
 @Entity('users', {schema: 'auth'})

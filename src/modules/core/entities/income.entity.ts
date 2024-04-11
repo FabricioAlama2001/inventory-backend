@@ -4,16 +4,18 @@ import {
     DeleteDateColumn,
     Entity,
 
+    Generated,
+
     OneToMany, OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { ProductEntity, SignatureEntity, TransactionDetailEntity } from '@core/entities';
+import { ProductEntity, SignatureEntity, TransactionInDetailEntity } from '@core/entities';
 
 //Cambios realizados creacion de la entidad
 
-@Entity('transactions', {schema: 'core'})
-export class TransactionEntity {
+@Entity('incomes', {schema: 'core'})
+export class IncomeEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -51,24 +53,22 @@ export class TransactionEntity {
     enabled: boolean;
     
     /** Inverse Relationship **/
-    @OneToMany(() => TransactionDetailEntity, transactionDetail => transactionDetail.transaction)
-    transactionDetails: TransactionDetailEntity[];
+    @OneToMany(() => TransactionInDetailEntity, transactionDetail => transactionDetail.income)
+    transactionInDetails: TransactionInDetailEntity[];
 
-    @OneToOne(() => SignatureEntity, signature => signature.transaction)
+    @OneToOne(() => SignatureEntity, signature => signature.income)
     signature: SignatureEntity;
-
     //
     @OneToMany(() => ProductEntity, product => product.category)
     products: ProductEntity[];
 
     /** Foreign Keys **/
-  
-
     /** Columns **/  
+    @Generated("increment")
     @Column({
        //aqui va el nombre de como va en la base de datos
         name: 'code',
-        type: 'varchar',
+        type: 'bigint',
         comment: 'Codigo del catalogo',
     })
     code: string;
@@ -87,13 +87,4 @@ export class TransactionEntity {
         comment: 'fecha de la transaccion',
     })
     date: Date;
-
-    @Column({
-        name: 'type',
-        type: 'boolean',
-        comment: 'Ingreso = true, egreso = false',
-    })
-    type: boolean;
-
-
 }
