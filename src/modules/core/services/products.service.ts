@@ -20,7 +20,7 @@ export class ProductsService {
     newEntity.sellingPrice = payload.sellingPrice;
     newEntity.categoryId = payload.category.id;
     newEntity.stock = payload.stock;
-    newEntity.enabled = payload.enabled;
+    // newEntity.enabled = payload.enabled;
 
     return await this.repository.save(newEntity);
   }
@@ -40,7 +40,7 @@ export class ProductsService {
     entity.sellingPrice = payload.sellingPrice;
     entity.categoryId = payload.category.id;
     entity.stock = payload.stock;
-    entity.enabled = payload.enabled;
+    // entity.enabled = payload.enabled;
 
     return await this.repository.save(entity);
   }

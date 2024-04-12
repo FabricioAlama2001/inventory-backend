@@ -7,7 +7,7 @@ import {
   RolesSeeder,
   UsersSeeder,
 } from '@database/seeders';
-import { DatabaseSeeder } from './seeders/database-seeder';
+import { DatabaseSeeder } from '@database/seeders';
 
 @Global()
 @Module({
