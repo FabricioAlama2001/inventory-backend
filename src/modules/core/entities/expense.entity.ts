@@ -71,10 +71,10 @@ export class ExpenseEntity {
     @Column({
        //aqui va el nombre de como va en la base de datos
         name: 'code',
-        type: 'varchar',
+        type: 'bigint',
         comment: 'Codigo del catalogo',
     })
-    code: string;
+    code: number;
 
     @Column({
         name: 'description',

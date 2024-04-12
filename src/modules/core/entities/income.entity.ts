@@ -71,7 +71,7 @@ export class IncomeEntity {
         type: 'bigint',
         comment: 'Codigo del catalogo',
     })
-    code: string;
+    code: number;
 
     @Column({
         name: 'description',
