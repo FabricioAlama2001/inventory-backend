@@ -1,11 +1,12 @@
-import { Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Res } from "@nestjs/common";
-import { ReportsService } from "../services/reports.service";
-import { ResponseHttpModel } from "@shared/models";
+import { Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Res } from '@nestjs/common';
+import { ReportsService } from '../services/reports.service';
+import { ResponseHttpModel } from '@shared/models';
 
 @Controller('reports')
 export class ReportsController {
   constructor(
-    private readonly reportsService: ReportsService) { }
+    private readonly reportsService: ReportsService) {
+  }
 
   @Get('all')
   @HttpCode(HttpStatus.OK)
@@ -34,8 +35,8 @@ export class ReportsController {
 
   @Get('expenses/:id')
   @HttpCode(HttpStatus.OK)
-  async generetePDFExpenses(@Res() res: Response): Promise<ResponseHttpModel> {
-    await this.reportsService.generatePdfExpenses(res);
+  async generetePDFExpenses(@Res() res: Response, @Param('id', ParseUUIDPipe) id: string): Promise<ResponseHttpModel> {
+    await this.reportsService.generatePdfExpenses(res, id);
 
     return {
       data: null,

@@ -86,6 +86,7 @@ export class ExpenseEntity {
   @Column({
     name: 'date',
     type: 'timestamp',
+    default: new Date(),
     comment: 'fecha de la transaccion',
   })
   date: Date;
