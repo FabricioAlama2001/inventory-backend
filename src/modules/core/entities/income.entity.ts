@@ -66,7 +66,6 @@ export class IncomeEntity {
     /** Columns **/  
     @Generated("increment")
     @Column({
-       //aqui va el nombre de como va en la base de datos
         name: 'code',
         type: 'bigint',
         comment: 'Codigo del catalogo',

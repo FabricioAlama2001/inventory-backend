@@ -20,6 +20,8 @@ export class ProductsService {
     newEntity.sellingPrice = payload.sellingPrice;
     newEntity.categoryId = payload.category.id;
     newEntity.stock = payload.stock;
+    // newEntity.enabled = payload.enabled;
+
     return await this.repository.save(newEntity);
   }
 
@@ -38,6 +40,7 @@ export class ProductsService {
     entity.sellingPrice = payload.sellingPrice;
     entity.categoryId = payload.category.id;
     entity.stock = payload.stock;
+    // entity.enabled = payload.enabled;
 
     return await this.repository.save(entity);
   }
@@ -50,7 +53,7 @@ export class ProductsService {
   }
 
   async findOne(id: string): Promise<ProductEntity> {
-    const entity = await this.repository.findOne({ relations:{category: true}, where: { id } });
+    const entity = await this.repository.findOne({ relations: { category: true }, where: { id } });
 
     if (!entity) {
       throw new NotFoundException('Registro no encontrado');
