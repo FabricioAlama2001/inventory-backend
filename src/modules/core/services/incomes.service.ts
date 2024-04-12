@@ -1,9 +1,13 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';;
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+
+;
 import { CoreRepositoryEnum } from '@shared/enums';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { SignaturesService } from './signatures.service';
 import { IncomeEntity, ProductEntity } from '@core/entities';
 import { TransactionInDetailsService } from './transaction-in-datails.service';
+import { ServiceResponseHttpModel } from '@shared/models';
+import { PaginationDto } from '@core/dto';
 
 @Injectable()
 export class IncomesService {
@@ -20,7 +24,7 @@ export class IncomesService {
     newEntity.code = payload.code;
     newEntity.description = payload.description;
     newEntity.date = payload.date;
-  
+
 
     const transactionCreated = await this.repository.save(newEntity);
 
@@ -49,7 +53,7 @@ export class IncomesService {
     entity.code = payload.code;
     entity.description = payload.description;
     entity.date = payload.date;
-   
+
 
     return await this.repository.save(entity);
   }
@@ -83,4 +87,50 @@ export class IncomesService {
     return await this.repository.softRemove(data);
   }
 
+  async findIncomes(params?: any): Promise<ServiceResponseHttpModel> {
+    if (params?.limit > 0 && params?.page >= 0) {
+      return await this.paginateAndFilter(params);
+    }
+
+    return { data: [], pagination: null };
+  }
+
+  private async paginateAndFilter(params: any): Promise<ServiceResponseHttpModel> {
+    let where: FindOptionsWhere<IncomeEntity> | FindOptionsWhere<IncomeEntity>[];
+    where = {};
+    let { page, search } = params;
+
+    const { limit } = params;
+
+    if (search) {
+      search = search.trim();
+      page = 0;
+      where = [];
+
+      where.push({
+        signature: {
+          authorizer: {
+            name: ILike(`%${search}%`),
+            lastname: ILike(`%${search}%`),
+          },
+        },
+      });
+      where.push({ description: ILike(`%${search}%`) });
+    }
+
+    const response = await this.repository.findAndCount({
+      where,
+      relations: { signature: { authorizer: true, dispatcher: true, receiver: true } },
+      take: limit,
+      skip: PaginationDto.getOffset(limit, page),
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
+
+    return {
+      data: response[0],
+      pagination: { limit, totalItems: response[1] },
+    };
+  }
 }

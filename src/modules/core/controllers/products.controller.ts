@@ -14,7 +14,6 @@ import {
 import { ProductsService } from '../services/products.service';
 import { ResponseHttpModel } from '@shared/models';
 
-
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {

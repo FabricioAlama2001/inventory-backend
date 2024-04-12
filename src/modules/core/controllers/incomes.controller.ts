@@ -1,9 +1,20 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ResponseHttpModel } from '@shared/models';
 import { IncomesService } from '../services/incomes.service';
 import { Auth, User } from '@auth/decorators';
 import { UserEntity } from '@auth/entities';
-
 
 @Controller('incomes')
 export class IncomesController {
@@ -46,7 +57,7 @@ export class IncomesController {
     };
   }
 
-  @Get()
+  @Get('all')
   @HttpCode(HttpStatus.OK)
   async findAll(): Promise<ResponseHttpModel> {
     const response = await this.incomesService.findAll();
@@ -70,5 +81,16 @@ export class IncomesController {
     };
   }
 
+  @Get('')
+  @HttpCode(HttpStatus.OK)
+  async findIncomes(@Query() params: any): Promise<ResponseHttpModel> {
+    const response = await this.incomesService.findIncomes(params);
 
+    return {
+      data: response.data,
+      pagination: response.pagination,
+      message: `index`,
+      title: ``,
+    };
+  }
 }
