@@ -30,12 +30,6 @@ export class ExpensesService {
 
       const product = await this.productRepository.findOneBy({ id: item.product.id });
 
-      product.stock -= Math.abs(item.quantity);
-
-      if (product.stock < 0) {
-        continue;
-      }
-
       await this.productRepository.save(product);
     }
 

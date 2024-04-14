@@ -33,8 +33,6 @@ export class IncomesService {
 
       const product = await this.productRepository.findOneBy({ id: item.product.id });
 
-      product.stock += Math.abs(item.quantity);
-
       await this.productRepository.save(product);
     }
 
