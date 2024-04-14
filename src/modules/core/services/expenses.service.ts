@@ -1,9 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CoreRepositoryEnum } from '@shared/enums';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { TransactionOutDetailsService } from './transaction-out-datails.service';
 import { SignaturesService } from './signatures.service';
-import { ExpenseEntity, ProductEntity } from '@core/entities';
+import { ExpenseEntity, IncomeEntity, ProductEntity } from '@core/entities';
+import { ServiceResponseHttpModel } from '@shared/models';
+import { PaginationDto } from '@core/dto';
 
 @Injectable()
 export class ExpensesService {
@@ -27,7 +29,12 @@ export class ExpensesService {
       await this.transactionDetailsService.create(transactionCreated, item);
 
       const product = await this.productRepository.findOneBy({ id: item.product.id });
+
       product.stock -= Math.abs(item.quantity);
+
+      if (product.stock < 0) {
+        continue;
+      }
 
       await this.productRepository.save(product);
     }
@@ -52,7 +59,10 @@ export class ExpensesService {
   }
 
   async findOne(id: string): Promise<any> {
-    const entity = await this.repository.findOne({ where: { id } });
+    const entity = await this.repository.findOne({ relations: {
+        signature: { authorizer: true, dispatcher: true, receiver: true },
+        transactionOutDetails: { product: true },
+      },where: { id } });
 
     if (!entity) {
       throw new NotFoundException('Registro no encontrado');
@@ -80,4 +90,114 @@ export class ExpensesService {
     return await this.repository.softRemove(data);
   }
 
+  async findExpenses(params?: any): Promise<ServiceResponseHttpModel> {
+    if (params?.limit > 0 && params?.page >= 0) {
+      return await this.paginateAndFilter(params);
+    }
+
+    return { data: [], pagination: null };
+  }
+
+  private async paginateAndFilter(params: any): Promise<ServiceResponseHttpModel> {
+    let where: FindOptionsWhere<IncomeEntity> | FindOptionsWhere<IncomeEntity>[];
+    where = {};
+    let { page, search } = params;
+
+    const { limit } = params;
+
+    if (search) {
+      search = search.trim();
+      page = 0;
+      where = [];
+
+      where.push({
+        signature: {
+          authorizer: {
+            identification: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          authorizer: {
+            name: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          authorizer: {
+            lastname: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          receiver: {
+            identification: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          receiver: {
+            name: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          receiver: {
+            lastname: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          dispatcher: {
+            identification: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          dispatcher: {
+            name: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          dispatcher: {
+            lastname: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({ description: ILike(`%${search}%`) });
+    }
+
+    const response = await this.repository.findAndCount({
+      where,
+      relations: { signature: { authorizer: true, dispatcher: true, receiver: true } },
+      take: limit,
+      skip: PaginationDto.getOffset(limit, page),
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
+
+    return {
+      data: response[0],
+      pagination: { limit, totalItems: response[1] },
+    };
+  }
 }

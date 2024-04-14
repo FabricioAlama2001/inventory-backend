@@ -59,7 +59,13 @@ export class IncomesService {
   }
 
   async findOne(id: string): Promise<any> {
-    const entity = await this.repository.findOne({ where: { id } });
+    const entity = await this.repository.findOne({
+      relations: {
+        signature: { authorizer: true, dispatcher: true, receiver: true },
+        transactionInDetails: { product: true },
+      },
+      where: { id },
+    });
 
     if (!entity) {
       throw new NotFoundException('Registro no encontrado');
@@ -110,11 +116,75 @@ export class IncomesService {
       where.push({
         signature: {
           authorizer: {
+            identification: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          authorizer: {
             name: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          authorizer: {
             lastname: ILike(`%${search}%`),
           },
         },
       });
+
+      where.push({
+        signature: {
+          receiver: {
+            identification: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          receiver: {
+            name: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          receiver: {
+            lastname: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          dispatcher: {
+            identification: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          dispatcher: {
+            name: ILike(`%${search}%`),
+          },
+        },
+      });
+
+      where.push({
+        signature: {
+          dispatcher: {
+            lastname: ILike(`%${search}%`),
+          },
+        },
+      });
+
       where.push({ description: ILike(`%${search}%`) });
     }
 

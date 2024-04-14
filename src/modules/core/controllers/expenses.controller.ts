@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ResponseHttpModel } from '@shared/models';
 import { ExpensesService } from '../services/expenses.service';
 import { Auth, User } from '@auth/decorators';
@@ -46,7 +58,7 @@ export class ExpensesController {
     };
   }
 
-  @Get()
+  @Get('all')
   @HttpCode(HttpStatus.OK)
   async findAll(): Promise<ResponseHttpModel> {
     const response = await this.expensesService.findAll();
@@ -70,5 +82,16 @@ export class ExpensesController {
     };
   }
 
+  @Get('')
+  @HttpCode(HttpStatus.OK)
+  async findExpenses(@Query() params: any): Promise<ResponseHttpModel> {
+    const response = await this.expensesService.findExpenses(params);
 
+    return {
+      data: response.data,
+      pagination: response.pagination,
+      message: `index`,
+      title: ``,
+    };
+  }
 }

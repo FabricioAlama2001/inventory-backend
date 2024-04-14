@@ -11,8 +11,7 @@ import {
 import { Inject, Injectable, NotFoundException, Res } from '@nestjs/common';
 import { CoreRepositoryEnum } from '@shared/enums';
 import { format } from 'date-fns';
-import { string } from 'joi';
-import { Between, Repository, SelectQueryBuilder, Transaction } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { es } from 'date-fns/locale';
 
 const { PDFDocument } = require('pdfkit-table-ts');
@@ -24,10 +23,13 @@ export class ReportsService {
     @Inject(CoreRepositoryEnum.CATEGORY_REPOSITORY) private readonly categoryRepository: Repository<CategoryEntity>) {
   }
 
-  async generatePdf(@Res() res: Response): Promise<Buffer> {
+  async generatePdfTransactionsByDates(@Res() res: Response, params: any): Promise<Buffer> {
+    console.log(params.startedAt.slice(1, -15));
+    console.log(params.endedAt.slice(1, -15));
+    const startedAt = new Date(params.startedAt);
+    const endedAt = new Date(params.endedAt);
 
-    const transactions = await this.findTransactionsByDates(new Date('2024-04-01'), new Date('2024-04-31'));
-
+    const transactions = await this.findTransactionsByDates(startedAt, endedAt);
 
     const doc = new PDFDocument({
       size: 'A4',
@@ -39,7 +41,7 @@ export class ReportsService {
 
     const tittle1 = 'CONSERVATORIO NACIONAL DE MÚSICA';
     const tittle2 = 'REPORTE CONTABLE';
-    const tittle3 = 'FECHA';
+    const tittle3 = `FECHA: desde ${format(startedAt, 'PPPP', { locale: es })} hasta ${format(endedAt, 'PPPP', { locale: es })}`;
 
     const textWidth1 = doc.widthOfString(tittle1);
     const textWidth2 = doc.widthOfString(tittle2);
@@ -55,7 +57,7 @@ export class ReportsService {
 
     doc.font('Times-Italic');
     doc.fontSize(10);
-    doc.text(tittle3, (doc.page.width - textWidth3) / 2, 50);
+    doc.text(tittle3, 20, 50);
 
     const rows = transactions.map(transaction => {
       return [
@@ -69,14 +71,13 @@ export class ReportsService {
     });
 
     const table = {
-      headers: ['CATEGORÍA', 'CÓDIGO', 'PRODUCTo', 'INGRESO', 'EGRESO', 'CANTIDAD TOTAL'],
+      headers: ['CATEGORÍA', 'CÓDIGO', 'PRODUCTO', 'INGRESOS', 'EGRESOS', 'CANTIDAD TOTAL'],
       rows,
     };
 
     const options = {
       width: 800,
       x: (doc.page.width - 800) / 2, // Calcula el centro horizontal restando el ancho de la tabla del ancho de la página y dividiendo por 2
-      y: 100,
       padding: { top: 10, bottom: 10, left: 10, right: 10 },
     };
 
@@ -231,7 +232,6 @@ export class ReportsService {
   }
 
   private async findTransactionsByDates(startedAt: Date, endedAt: Date) {
-
     const queryBuilder: SelectQueryBuilder<CategoryEntity> = this.categoryRepository.createQueryBuilder('categories');
 
     queryBuilder.select([
@@ -247,11 +247,13 @@ export class ReportsService {
       .leftJoin(TransactionOutDetailEntity, 'transaction_out_details', 'transaction_out_details.product_id = products.id')
       .leftJoin(IncomeEntity, 'incomes', 'incomes.id = transaction_in_details.income_id')
       .leftJoin(ExpenseEntity, 'expenses', 'expenses.id = transaction_out_details.expense_id')
-      .where('incomes.date between :startedAt and :endedAt', { startedAt, endedAt })
+      .where('incomes.date between :startedAt and :endedAt or expenses.date between :startedAt and :endedAt', {
+        startedAt,
+        endedAt,
+      })
       .groupBy('categories.name')
       .addGroupBy('products.name')
-      .addGroupBy('products.stock')
-      .addGroupBy('products.code')
+       .addGroupBy('products.code')
       .orderBy('categories.name')
       .addOrderBy('products.name');
 
